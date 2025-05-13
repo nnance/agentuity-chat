@@ -22,6 +22,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "workspaces": [
-    "apps/chat"
+    "apps/chat",
+    "apps/chat-agents"
   ]
 }
