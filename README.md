@@ -35,7 +35,7 @@ To get started with the project, follow these steps:
 
 Each application has its own `.env` file for configuration. The `.env` file should contain the following environment variables:
 
-#### Agentuity Chat: `apps/chat-agent`
+#### Agentuity Chat: `apps/chat-agents`
 
 - `AGENTUITY_API_KEY`: Your Vercel AI API key.
 
@@ -52,7 +52,7 @@ Each application has its own `.env` file for configuration. The `.env` file shou
 npm run dev
 ```
 
-2. In a separate tab Navigate to the `apps/chat-agent` directory.
+2. In a separate tab Navigate to the `apps/chat-agents` directory.
 
 ```bash
 agentuity dev
@@ -90,10 +90,10 @@ To deploy your Agentuity Chat agent, you can use the Agentuity CLI. Follow these
 npm install -g agentuity
 ```
 
-2. Navigate to the `apps/chat-agent` directory.
+2. Navigate to the `apps/chat-agents` directory.
 
 ```bash
-cd apps/chat-agent
+cd apps/chat-agents
 ```
 
 3. Run the following command to deploy your agent:
