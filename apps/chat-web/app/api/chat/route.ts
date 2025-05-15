@@ -13,10 +13,6 @@ function dataStreamPassthrough(dataStream: ReadableStream<Uint8Array>) {
             return { done };
           }
           const decodedValue = decoder.decode(value, { stream: true });
-          // const dataStreamPart = formatDataStreamPart(
-          //   "text",
-          //   decodedValue
-          // );
           controller.enqueue(decodedValue);
           return read();
         }
@@ -60,8 +56,10 @@ export async function POST(req: Request) {
       status: 200,
       statusText: "OK",
       async execute(dataStream) {
-        const url =
-          "http://127.0.0.1:3500/agent_f1fe183d28ced8903776011734f76c12";
+        const url = process.env.AGENTUITY_URL;
+        if (!url) {
+          throw new Error("AGENTUITY_URL is not defined");
+        }
         const response = await fetch(url, {
           method: "POST",
           headers: {
