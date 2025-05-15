@@ -1,10 +1,14 @@
 import { createDataStreamResponse, formatDataStreamPart } from "ai";
 
-function dataStreamPassthrough(dataStream: ReadableStream<Uint8Array>) {
+type dataStreamDecoder = (value: Uint8Array<ArrayBufferLike>) => string;
+
+function dataStreamPassthrough(
+  dataStream: ReadableStream<Uint8Array>,
+  decoder: dataStreamDecoder
+) {
   return new ReadableStream({
     start(controller) {
       const reader = dataStream.getReader();
-      const decoder = new TextDecoder("utf-8");
       async function read() {
         if (reader) {
           const { done, value } = await reader.read();
@@ -12,7 +16,7 @@ function dataStreamPassthrough(dataStream: ReadableStream<Uint8Array>) {
             controller.close();
             return { done };
           }
-          const decodedValue = decoder.decode(value, { stream: true });
+          const decodedValue = decoder(value);
           controller.enqueue(decodedValue);
           return read();
         }
@@ -22,27 +26,18 @@ function dataStreamPassthrough(dataStream: ReadableStream<Uint8Array>) {
   });
 }
 
-function textStreamToDataStream(dataStream: ReadableStream<Uint8Array>) {
-  return new ReadableStream({
-    start(controller) {
-      const reader = dataStream.getReader();
-      const decoder = new TextDecoder("utf-8");
-      async function read() {
-        if (reader) {
-          const { done, value } = await reader.read();
-          if (done) {
-            controller.close();
-            return { done };
-          }
-          const decodedValue = decoder.decode(value, { stream: true });
-          const dataStreamPart = formatDataStreamPart("text", decodedValue);
-          controller.enqueue(dataStreamPart);
-          return read();
-        }
-      }
-      return read();
-    },
-  });
+function dataStreamDecoder() {
+  const decoder = new TextDecoder("utf-8");
+  return (value: Uint8Array<ArrayBufferLike>) =>
+    decoder.decode(value, { stream: true });
+}
+
+function textStreamDecoder() {
+  const decoder = new TextDecoder("utf-8");
+  return (value: Uint8Array<ArrayBufferLike>) => {
+    const decodedValue = decoder.decode(value, { stream: true });
+    return formatDataStreamPart("text", decodedValue);
+  };
 }
 
 export async function POST(req: Request) {
@@ -69,7 +64,10 @@ export async function POST(req: Request) {
         });
 
         if (response.body) {
-          const stream = dataStreamPassthrough(response.body);
+          const stream = dataStreamPassthrough(
+            response.body,
+            dataStreamDecoder()
+          );
           dataStream.merge(stream);
         }
       },
