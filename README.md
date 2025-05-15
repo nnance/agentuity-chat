@@ -37,7 +37,7 @@ Each application has its own `.env` file for configuration. The `.env` file shou
 
 #### Agentuity Chat: `apps/chat-agents`
 
-- `AGENTUITY_API_KEY`: Your Vercel AI API key.
+- `AGENTUITY_API_KEY`: Your Agentuity SDK key.
 
 #### Chat Web App: `apps/chat-web`
 
