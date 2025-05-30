@@ -37,7 +37,7 @@ Each application has its own `.env` file for configuration. The `.env` file shou
 
 #### Agentuity Chat: `apps/chat-agents`
 
-- `AGENTUITY_API_KEY`: Your Agentuity SDK key.
+- `AGENTUITY_SDK_KEY`: Your Agentuity SDK key.
 
 #### Chat Web App: `apps/chat-web`
 
@@ -82,12 +82,12 @@ To learn more about Next.js, take a look at the following resources:
 
 ## Deploy on Agentuity
 
-To deploy your Agentuity Chat agent, you can use the Agentuity CLI. Follow these steps:
+To deploy your Agentuity Chat agent, you can use the Agentuity CLI or [Deploy Automatically from GitHub](https://app.agentuity.com/deploy?repo=https://github.com/nnance/agentuity-chat). Follow these steps:
 
 1. Install the Agentuity CLI globally if you haven't already:
 
 ```bash
-npm install -g agentuity
+curl -fsS https://agentuity.sh | sh
 ```
 
 2. Navigate to the `apps/chat-agents` directory.
